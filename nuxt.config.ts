@@ -36,7 +36,8 @@ export default defineNuxtConfig({
   ssr: true,
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml']
+      routes: ['/sitemap.xml'],
+      failOnError: false
     }
   },
   
@@ -48,8 +49,15 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/scripts',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/sitemap'
   ],
+  sitemap: {
+    siteUrl: 'https://legislacao.estudodalei.com.br',
+  },
+  site: {
+    url: 'https://legislacao.estudodalei.com.br'  // Troque pelo domínio real ou o de preview
+  },
   googleFonts: {
     families: {
       Roboto: [300, 400, 500, 700]
