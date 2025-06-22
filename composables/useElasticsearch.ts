@@ -41,10 +41,10 @@ export const useElasticsearch = () => {
           : query,
         from: (page - 1) * size,
         size,
-        // sort: [{ createdAt: { order: "desc" } }],
+        sort: [{ timestamp: { order: "desc" } }],
         highlight: {
           fields: {
-            conteudo: {},
+            texto_original: {},
             titulo: {}
           }
         }

@@ -15,24 +15,25 @@
            Publicado em {{ formatDate(post._source?.timestamp) }}
         </small>
       <v-row class="meta-info mb-5" dense>
-        <v-col cols="6">
-          <v-chip size="small" color="blue" variant="tonal" v-if="post._source.disciplina">
+        <v-col cols="6" sm="4" v-if="post._source?.disciplina">
+          <v-chip size="small" color="blue" variant="tonal" >
             {{ post._source.disciplina }}
           </v-chip>
         </v-col>
-        <v-col cols="6" sm="3" v-if="post._source?.banca">
+        <v-col cols="6" sm="2" v-if="post._source?.art">
           <v-chip size="small" color="green" variant="tonal">
-            {{ post._source?.banca }}
+            Artigo {{ post._source?.art }}
           </v-chip>
         </v-col>
-        <v-col cols="6" sm="3" v-if="post._source?.concurso">
-          <v-chip size="small" color="orange" variant="tonal" >
-            {{ post._source?.concurso }}
+        <v-col cols="6" sm="3" v-if="post._source?.arts">
+          outros artigos: 
+          <v-chip size="small" color="orange" class="mr-1" variant="tonal" v-for="art, a in post._source?.arts" :key="a">
+            {{ art }}
           </v-chip>
         </v-col>
-        <v-col cols="6" sm="3" v-if="post._source.cargo">
+        <v-col cols="6" sm="3" v-if="post._source?.questoes?.length">
           <v-chip size="small" color="purple" variant="tonal" >
-            {{ post._source.cargo }}
+            {{  post._source.questoes.length }} Quest <span> {{ post._source.questoes.length > 1 ? 'ões' : 'ão'  }}  </span> 
           </v-chip>
         </v-col>
       </v-row>

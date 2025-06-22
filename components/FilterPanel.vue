@@ -16,6 +16,7 @@
             density="compact"
             clearable
             @input="debounceSearch"
+            hide-details
           ></v-text-field>
         </v-col>
         
@@ -27,10 +28,11 @@
             variant="outlined"
             density="compact"
             clearable
+            hide-details
           ></v-select>
         </v-col>
         
-        <v-col cols="12" sm="6" md="3">
+        <v-col cols="12" sm="6" md="3" v-if="false">
           <v-select
             v-model="localFilters.banca"
             :items="bancas"
@@ -38,10 +40,11 @@
             variant="outlined"
             density="compact"
             clearable
+            hide-details
           ></v-select>
         </v-col>
         
-        <v-col cols="12" sm="6" md="3">
+        <v-col cols="12" sm="6" md="3" v-if="false">
           <v-select
             v-model="localFilters.concurso"
             :items="concursos"
@@ -52,7 +55,7 @@
           ></v-select>
         </v-col>
         
-        <v-col cols="12" sm="6" md="3">
+        <v-col cols="12" sm="6" md="3" v-if="false">
           <v-select
             v-model="localFilters.cargo"
             :items="cargos"
@@ -63,7 +66,7 @@
           ></v-select>
         </v-col>
         
-        <v-col cols="12" sm="6" md="3">
+        <v-col cols="12" sm="6" md="3" v-if="false">
           <v-select
             v-model="localFilters.area"
             :items="areas"
