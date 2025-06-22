@@ -56,7 +56,7 @@ export default defineNuxtConfig({
     siteUrl: 'https://legislacao.estudodalei.com.br',
   },
   site: {
-    url: 'https://legislacao.estudodalei.com.br'  // Troque pelo domínio real ou o de preview
+    url: 'https://legislacao.estudodalei.com.br'  
   },
   googleFonts: {
     families: {
