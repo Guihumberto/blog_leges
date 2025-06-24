@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="max-width: 1080px;">
     <div v-if="pending" class="text-center py-8">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </div>
@@ -60,7 +60,7 @@
           </p>
         </header>
         
-        <div class="post-content" v-html="post.texto"></div>
+        <div class="post-content" v-html="processedContent"></div>
 
         <!-- Questões -->
             <div class="questions-section mt-10">
@@ -193,6 +193,22 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
+
+const markdownText = '# Hello\n\n**Isso é um teste!**'
+
+const html = marked.parse(markdownText)
+
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+  smartLists: true,
+  smartypants: true
+})
+
 const route = useRoute()
 const { searchPosts } = useElasticsearch()
 
@@ -320,6 +336,21 @@ const getResultText = (cardIndex, questionIndex, correctAnswer) => {
   const userAnswer = userAnswers.get(questionId)
   return userAnswer === correctAnswer ? 'Parabéns! Resposta correta!' : 'Resposta incorreta'
 }
+
+const processedContent = computed(() => {
+  if (!post.value?.texto) return ''
+  
+  try {
+    const html = marked.parse(post.value.texto)
+    return DOMPurify.sanitize(html)
+  } catch (error) {
+    console.error('Erro ao processar markdown:', error)
+    return post.value.texto
+  }
+})
+
+
+
 
 
 onMounted(async () => {
