@@ -194,19 +194,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
-
-const markdownText = '# Hello\n\n**Isso é um teste!**'
+import { parseMixedMarkdown } from '@/utils/parseMixedMarkdown'
 
 
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-  smartLists: true,
-  smartypants: true
-})
 
 const route = useRoute()
 const { searchPosts } = useElasticsearch()
@@ -339,8 +329,9 @@ const getResultText = (cardIndex, questionIndex, correctAnswer) => {
 
 const processedContent = computed(() => {
   try {
-    const html = marked.parse(post.value.texto)
-    return DOMPurify.sanitize(html)
+    const originalHtmlWithMarkdown = post.value.texto
+    const htmlContent = parseMixedMarkdown(originalHtmlWithMarkdown)
+    return htmlContent
   } catch (error) {
     console.error('Erro ao processar markdown:', error)
     return post.value.texto
