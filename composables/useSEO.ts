@@ -10,6 +10,7 @@ interface SEOData {
 export const useSEO = () => {
   const setSEO = (data: SEOData) => {
     const { title, description, keywords, ogImage, ogType = 'website', canonical } = data
+
     
     useHead({
       title,

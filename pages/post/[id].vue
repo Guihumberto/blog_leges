@@ -200,7 +200,6 @@ import DOMPurify from 'dompurify'
 
 const markdownText = '# Hello\n\n**Isso é um teste!**'
 
-const html = marked.parse(markdownText)
 
 marked.setOptions({
   breaks: true,
@@ -253,7 +252,8 @@ watchEffect(() => {
         },
         { property: 'og:title', content: post.value.titulo },
         { property: 'og:description', content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') },
-        { property: 'og:type', content: 'article' }
+        { property: 'og:type', content: 'article' },
+        { property: 'og:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' }
       ]
     })
   }
@@ -338,8 +338,6 @@ const getResultText = (cardIndex, questionIndex, correctAnswer) => {
 }
 
 const processedContent = computed(() => {
-  if (!post.value?.texto) return ''
-  
   try {
     const html = marked.parse(post.value.texto)
     return DOMPurify.sanitize(html)

@@ -92,7 +92,7 @@
 <script setup lang="ts">
   // SEO
   useHead({
-    title: 'Legislação Educacional - Posts Explicativos',
+    title: 'Blog Leges -  Estudo da Lei: Comentários e questões de concurso',
     meta: [
       { 
         name: 'description', 

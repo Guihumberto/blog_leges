@@ -19,7 +19,10 @@ export default defineNuxtConfig({
   // SEO Configuration
   app: {
     head: {
-      title: 'Legislação Educacional - Posts Explicativos',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      ],
+      title: 'Blog Leges -  Estudo da Lei: Comentários e questões de concurso',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -27,7 +30,13 @@ export default defineNuxtConfig({
           name: 'description', 
           content: 'Textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo' 
         },
-        { name: 'keywords', content: 'legislação, educação, concursos, direito educacional' }
+        { name: 'keywords', content: 'legislação, educação, concursos, direito educacional' },
+        { property: 'og:title', content: 'Blog Leges -  Estudo da Lei' },
+        { property: 'og:description', content: 'Comentários e questões de concurso.' },
+        { property: 'og:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' },
+        { property: 'og:url', content: 'https://blogleges.estudodalei.com.br/' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary_large_image' }
       ]
     }
   },
@@ -40,7 +49,6 @@ export default defineNuxtConfig({
       failOnError: false
     }
   },
-  
 
   modules: [
     '@nuxt/content',
@@ -55,16 +63,18 @@ export default defineNuxtConfig({
   sitemap: {
     siteUrl: 'https://legislacao.estudodalei.com.br',
   },
+
   site: {
     url: 'https://legislacao.estudodalei.com.br'  
   },
+
   googleFonts: {
     families: {
       Roboto: [300, 400, 500, 700]
     }
   },
+
   runtimeConfig: {
-    // Configurações do Elasticsearch
     elasticsearchNode: process.env.ELASTICSEARCH_NODE,
     elasticsearchUser: process.env.ELASTICSEARCH_USER,
     elasticsearchPassword: process.env.ELASTICSEARCH_PASSWORD,
