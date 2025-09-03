@@ -1,43 +1,45 @@
 <template>
-  <v-container fluid style="max-width: 1080px;">
-      <v-row class="blog-header" no-gutters>
-        <v-col cols="12">
-          <div class="header-container">
-            <!-- Seção do conteúdo -->
-            <div class="content-section">
-              <!-- <div class="icon-wrapper">
-                <v-icon size="48" color="primary">mdi-scale-balance</v-icon>
-              </div> -->
-              <div class="text-content">
-                <h1 class="blog-title">Blog Estudo da Lei</h1>
-                <p class="blog-subtitle">
-                  Textos explicativos e questões sobre legislação para concursos
-                  <br>
-                  <span class="highlight-text">Organizado por disciplina, banca, concurso e cargo</span>
-                </p>
-              </div>
-            </div>
-            
-            <!-- Seção da imagem ilustrativa -->
-            <div class="image-section">
-              <div class="law-illustration">
-                <v-icon size="120" color="grey-lighten-2">mdi-gavel</v-icon>
-                <div class="decorative-lines">
-                  <div class="line line-1"></div>
-                  <div class="line line-2"></div>
-                  <div class="line line-3"></div>
+  <Header />
+  <section class="tw-bg-gradient-to-br tw-from-blue-600 tw-via-blue-700 tw-to-purple-800 tw-text-white tw-py-20 tw-relative tw-overflow-hidden">
+        <div class="tw-absolute tw-inset-0 tw-bg-black tw-bg-opacity-20"></div>
+
+        <!-- Floating elements -->
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-opacity-20">
+            <div class="tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-animate-float"></div>
+        </div>
+        <div class="tw-absolute tw-bottom-10 tw-right-10 tw-opacity-20" style="animation-delay: -3s;">
+            <div class="tw-w-24 tw-h-24 tw-bg-white tw-rounded-full tw-animate-float"></div>
+        </div>
+
+        <div class="tw-container tw-mx-auto tw-px-4 tw-relative tw-z-10">
+            <div class="tw-max-w-4xl tw-mx-auto tw-text-center tw-animate-fade-in">
+                <div class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-mb-8 tw-backdrop-filter tw-backdrop-blur-sm tw-border tw-border-white tw-border-opacity-20">
+                    <svg class="tw-w-5 tw-h-5 tw-mr-2 tw-text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <span class="tw-font-semibold">CONTEÚDO PREMIUM</span>
                 </div>
-              </div>
+
+                <h1 class="tw-text-5xl tw-md:text-6xl tw-font-bold tw-mb-6 tw-leading-tight">
+                    Blog <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500">Estudo da Lei</span>
+                </h1>
+
+                <p class="tw-text-xl tw-md:text-2xl tw-mb-8 tw-text-gray-100 tw-leading-relaxed tw-max-w-3xl tw-mx-auto">
+                    Textos explicativos e questões sobre legislação para concursos<br>
+                    <span class="tw-text-lg tw-opacity-90">Organizado por disciplina, banca, concurso e cargo</span>
+                </p>
+
             </div>
-          </div>
-        </v-col>
-     </v-row>
-    
+        </div>
+  </section>
+  <section class="py-12 bg-blue-grey-lighten-5">
     <FilterPanel 
       :filters="filters" 
       :aggregations="aggregations"
       @update:filters="updateFilters"
     />
+  </section>
+  <v-container fluid style="max-width: 1250px;">    
     
     <v-row>
       <v-col cols="12">
@@ -93,17 +95,22 @@
   // SEO
   useHead({
     title: 'Blog Leges -  Estudo da Lei: Comentários e questões de concurso',
+    link: [
+      { rel: 'canonical', href: 'https://blogleges.estudodalei.com.br/' }
+    ],
     meta: [
-      { 
-        name: 'description', 
-        content: 'Explore textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo. Encontre informações atualizadas para concursos públicos.' 
+      {
+        name: 'description',
+        content: 'Explore textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo. Encontre informações atualizadas para concursos públicos.'
       },
-      { 
-        name: 'keywords', 
-        content: 'legislação educacional, concursos públicos, direito educacional, leis de educação, normativas educacionais' 
+      {
+        name: 'keywords',
+        content: 'legislação educacional, concursos públicos, direito educacional, leis de educação, normativas educacionais'
       }
     ]
   })
+
+  import Header from '~/components/Header.vue'
 
   const { searchPosts, getAggregations } = useElasticsearch()
 

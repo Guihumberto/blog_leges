@@ -1,7 +1,7 @@
 <template>
-  <v-card class="mb-4">
+  <v-card class="mb-4 border rounded-lg mx-auto" variant="flat" max-width="1220px" color="transparent">
     <v-card-title>
-      <v-icon icon="mdi-filter" class="me-2"></v-icon>
+      <v-icon icon="mdi-filter" color="grey" size="small" class="me-2"></v-icon>
       Filtros
     </v-card-title>
     
@@ -13,7 +13,7 @@
             label="Buscar"
             prepend-inner-icon="mdi-magnify"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
             @input="debounceSearch"
             hide-details
@@ -26,7 +26,7 @@
             :items="disciplinas"
             label="Disciplina"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
             hide-details
           ></v-select>
@@ -38,7 +38,7 @@
             :items="bancas"
             label="Banca"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
             hide-details
           ></v-select>
@@ -50,7 +50,7 @@
             :items="concursos"
             label="Concurso"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
           ></v-select>
         </v-col>
@@ -61,7 +61,7 @@
             :items="cargos"
             label="Cargo"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
           ></v-select>
         </v-col>
@@ -72,7 +72,7 @@
             :items="areas"
             label="Área"
             variant="outlined"
-            density="compact"
+            rounded="lg"
             clearable
           ></v-select>
         </v-col>
@@ -80,9 +80,10 @@
         <v-col cols="12" sm="6" md="3">
           <v-btn
             color="primary"
-            variant="outlined"
             @click="clearFilters"
-            block
+            rounded="lg"
+            size="x-large"
+            prepend-icon="mdi-filter"
           >
             Limpar Filtros
           </v-btn>

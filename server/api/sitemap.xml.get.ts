@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    const baseUrl = 'https://seudominio.com.br' // Substitua pelo seu domínio
+    const baseUrl = 'https://blogleges.estudodalei.com.br' // Domínio do blog
     
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
   </url>`
 
     // Adicionar URLs dos posts
-    response.body.hits.hits.forEach((hit: any) => {
+    response.hits.hits.forEach((hit: any) => {
       sitemap += `
   <url>
     <loc>${baseUrl}/post/${hit._id}</loc>

@@ -1,2 +1,18 @@
 User-Agent: *
-Disallow:
+Allow: /
+
+# Allow access to sitemap
+Allow: /sitemap.xml
+
+# Disallow access to admin areas (if any)
+Disallow: /admin/
+Disallow: /api/
+
+# Disallow access to search results
+Disallow: /*?*search=*
+
+# Crawl delay (optional)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://blogleges.estudodalei.com.br/sitemap.xml
