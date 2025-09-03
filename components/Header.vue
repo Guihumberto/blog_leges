@@ -1,7 +1,7 @@
 <template>
   <header class="tw-bg-white tw-shadow-lg tw-sticky tw-top-0 tw-z-50">
     <div class="tw-container tw-mx-auto tw-px-4">
-      <div class="tw-flex tw-items-center tw-justify-between tw-h-16">
+      <div class="tw-flex tw-items-center tw-justify-center tw-h-16">
         <div class="tw-flex tw-items-center tw-space-x-4">
           <div class="tw-flex tw-items-center tw-space-x-2">
             <div class="tw-w-10 tw-h-10 tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-font-semibold tw-text-white">
@@ -39,13 +39,13 @@
           </div>
 
           <!-- Dropdown CONCURSOS -->
-          <div class="tw-relative">
+          <!-- <div class="tw-relative">
             <button @click="showConcursosDropdown = !showConcursosDropdown" class="tw-text-gray-700 tw-hover:text-blue-600 tw-font-medium tw-transition-colors tw-flex tw-items-center">
               CONCURSOS
               <svg class="tw-w-4 tw-h-4 tw-ml-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
-            </button>
+            </button> -->
             <!-- <div v-if="showConcursosDropdown" @mouseleave="showConcursosDropdown = false" class="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-10">
               <NuxtLink to="/concurso/policia-federal" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Polícia Federal</NuxtLink>
               <NuxtLink to="/concurso/sefaz-ma" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Sefaz-MA</NuxtLink>
@@ -53,30 +53,30 @@
               <hr class="my-2 border-gray-200">
               <NuxtLink to="/concursos" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">Ver todos os concursos</NuxtLink>
             </div> -->
-          </div>
+          <!-- </div> -->
 
           <NuxtLink to="/" class="tw-text-gray-700 tw-hover:text-blue-600 tw-font-medium tw-transition-colors">BLOG</NuxtLink>
         </nav>
 
-        <div class="tw-flex tw-items-center tw-space-x-4">
+        <!-- <div class="tw-flex tw-items-center tw-space-x-4">
           <button class="tw-p-2 tw-text-gray-600 tw-hover:text-blue-600 tw-transition-colors">
             <svg class="tw-w-5 tw-h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
             </svg>
-          </button>
+          </button> -->
 
           <!-- Botão ENTRAR destacado -->
-          <NuxtLink to="/" 
+          <!-- <NuxtLink to="/" 
           class="tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg tw-font-semibold tw-hover:from-blue-700 tw-hover:to-purple-700 tw-transition-all tw-duration-200 tw-shadow-md tw-hover:shadow-lg tw-transform tw-hover:-translate-y-0.5">
             ENTRAR
-          </NuxtLink>
+          </NuxtLink> -->
 
           <!-- <button @click="mobileMenuOpen = !mobileMenuOpen" class="tw-md:hidden tw-p-2 tw-text-gray-600">
             <svg class="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </button> -->
-        </div>
+        <!-- </div> -->
       </div>
 
       <!-- Mobile Menu -->
