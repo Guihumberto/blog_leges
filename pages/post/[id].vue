@@ -53,6 +53,12 @@
                   </svg>
                   {{ post.disciplina }}
                 </span>
+                <span v-if="post?.art" class="tw-bg-indigo-100 tw-text-indigo-800 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold tw-flex tw-items-center">
+                  <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  Art. {{ post.art }}
+                </span>
                 <span v-if="post?.banca" class="tw-bg-green-100 tw-text-green-800 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold tw-flex tw-items-center">
                   <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -71,6 +77,39 @@
                   </svg>
                   {{ post.cargo }}
                 </span>
+                <span v-if="post?.name_law" class="tw-bg-teal-100 tw-text-teal-800 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold tw-flex tw-items-center">
+                  <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  {{ post.name_law }}
+                </span>
+              </div>
+
+              <!-- Arts Chips -->
+              <div v-if="post?.arts?.length" class="tw-flex tw-flex-wrap tw-gap-2 tw-mb-6">
+                <span
+                  v-for="art in post.arts"
+                  :key="art"
+                  class="tw-bg-cyan-100 tw-text-cyan-800 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm tw-font-medium tw-flex tw-items-center"
+                >
+                  <svg class="tw-w-3 tw-h-3 tw-mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  Art. {{ art }}
+                </span>
+              </div>
+
+              <!-- Texto Original Button -->
+              <div v-if="post?.texto_original" class="tw-mb-6">
+                <button
+                  @click="showTextoOriginalDialog = true"
+                  class="tw-flex tw-items-center tw-px-4 tw-py-2 tw-bg-gray-100 hover:tw-bg-gray-200 tw-text-gray-700 tw-rounded-lg tw-font-medium tw-transition-colors"
+                >
+                  <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                  </svg>
+                  Ver Texto Original
+                </button>
               </div>
 
               <!-- Tags -->
@@ -253,6 +292,26 @@
           </article>
         </div>
       </div>
+
+      <!-- Texto Original Dialog -->
+      <div v-if="showTextoOriginalDialog" class="tw-fixed tw-inset-0 tw-z-50 tw-flex tw-items-center tw-justify-center tw-bg-black tw-bg-opacity-50" @click="showTextoOriginalDialog = false">
+        <div class="tw-bg-white tw-rounded-2xl tw-shadow-2xl tw-max-w-4xl tw-w-full tw-mx-4 tw-max-h-[90vh] tw-overflow-hidden" @click.stop>
+          <div class="tw-flex tw-items-center tw-justify-between tw-p-6 tw-border-b tw-border-gray-200">
+            <h3 class="tw-text-xl tw-font-bold tw-text-gray-800">Texto Original</h3>
+            <button
+              @click="showTextoOriginalDialog = false"
+              class="tw-p-2 tw-text-gray-400 hover:tw-text-gray-600 tw-transition-colors"
+            >
+              <svg class="tw-w-6 tw-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          <div class="tw-p-6 tw-overflow-y-auto tw-max-h-[calc(90vh-120px)]">
+            <div class="tw-prose tw-prose-lg tw-max-w-none tw-text-gray-700" v-html="post?.texto_original"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -275,6 +334,9 @@
     questoes?: Questao[]
     id_law?: string
     art?: string
+    arts?: string[]
+    texto_original?: string
+    name_law?: string
     [key: string]: any
   }
 
@@ -291,6 +353,7 @@
   const post = ref<Post | null>(null)
   const mindMap = ref<any>(null)
   const showMindMapDialog = ref(false)
+  const showTextoOriginalDialog = ref(false)
   const pending = ref(true)
   const error = ref<Error | null>(null)
 

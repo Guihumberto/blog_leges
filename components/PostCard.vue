@@ -2,7 +2,7 @@
   <article class="tw-blog-card tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden tw-animate-slide-up mb-5" @click.stop="$router.push(`/post/${generateSlug(post._source.titulo)}-${post._id}`)">
     <div class="tw-p-4 sm:tw-p-6 lg:tw-p-8">
       <div class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-mb-6">
-        <div class="tw-mb-4 lg:tw-mb-0">
+        <div class="tw-mb-4 lg:tw-mb-0 tw-order-2 lg:tw-order-1">
           <h2 class="tw-text-xl sm:tw-text-2xl lg:tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-3 tw-leading-tight hover:tw-text-blue-600 tw-transition-colors tw-cursor-pointer">
             {{ post._source.titulo }}
           </h2>
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="lg:tw-ml-8 tw-flex-shrink-0">
+        <div class="lg:tw-ml-8 tw-flex-shrink-0 tw-order-1 lg:tw-order-2 mb-5">
           <div class="tw-w-16 tw-h-16 sm:tw-w-20 sm:tw-h-20 lg:tw-w-32 lg:tw-h-32 tw-bg-gradient-to-br tw-from-blue-400 tw-to-purple-500 tw-rounded-2xl tw-flex tw-items-center tw-justify-center tw-shadow-lg">
             <svg class="tw-w-6 tw-h-6 sm:tw-w-8 sm:tw-h-8 lg:tw-w-12 lg:tw-h-12 tw-text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
@@ -47,7 +47,7 @@
           <span class="tw-text-gray-500 tw-text-sm" v-if="post._source.palavras_chaves?.length > 4">+{{ post._source.palavras_chaves?.length - 4 }} mais</span>
         </div>
 
-        <button class="tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-px-4 tw-py-2 sm:tw-px-6 tw-rounded-lg tw-font-semibold tw-transition-all tw-flex tw-items-center tw-text-sm sm:tw-text-base" @click.stop="$router.push(`/post/${generateSlug(post._source.titulo)}-${post._id}`)">
+        <button class="tw-self-end tw-bg-transparent tw-text-blue-600 hover:tw-text-blue-700 tw-px-0 tw-py-0 tw-rounded-none tw-font-normal tw-transition-all tw-flex tw-items-center tw-text-sm" @click.stop="$router.push(`/post/${generateSlug(post._source.titulo)}-${post._id}`)">
           VER MAIS
           <svg class="tw-w-4 tw-h-4 tw-ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
