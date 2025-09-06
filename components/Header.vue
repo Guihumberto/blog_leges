@@ -1,14 +1,14 @@
 <template>
   <header class="tw-bg-white tw-shadow-lg tw-sticky tw-top-0 tw-z-50">
-    <div class="tw-container tw-mx-auto tw-px-4">
-      <div class="tw-flex tw-items-center tw-justify-center tw-h-16">
+    <div class="tw-container tw-mx-auto tw-px-3 sm:tw-px-4">
+      <div class="tw-flex tw-items-center tw-justify-center tw-h-12 sm:tw-h-16">
         <div class="tw-flex tw-items-center tw-space-x-4">
           <div class="tw-flex tw-items-center tw-space-x-2">
             <div class="tw-w-10 tw-h-10 tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-font-semibold tw-text-white">
               EL
             </div>
             <div>
-              <h1 class="tw-text-xl tw-font-bold tw-text-gray-800">ESTUDO DA LEI</h1>
+              <h1 class="tw-text-lg sm:tw-text-xl tw-font-bold tw-text-gray-800">ESTUDO DA LEI</h1>
               <p class="tw-text-xs tw-text-gray-500">Legislação</p>
             </div>
           </div>

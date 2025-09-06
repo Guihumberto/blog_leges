@@ -27,9 +27,9 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { 
-          name: 'description', 
-          content: 'Textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo' 
+        {
+          name: 'description',
+          content: 'Textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo'
         },
         { name: 'keywords', content: 'legislação, educação, concursos, direito educacional' },
         { name: 'author', content: 'Legislação Educacional' },
@@ -48,6 +48,11 @@ export default defineNuxtConfig({
         { name: 'twitter:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' }
       ],
       script: [
+        // ResizeObserver polyfill for browser compatibility
+        {
+          src: 'https://polyfill.io/v3/polyfill.min.js?features=ResizeObserver',
+          defer: true
+        },
         {
           type: 'application/ld+json',
           innerHTML: JSON.stringify({

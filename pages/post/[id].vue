@@ -1,6 +1,6 @@
 <template>
   <div class="tw-min-h-screen tw-bg-gray-50">
-    <div class="tw-max-w-5xl tw-mx-auto tw-px-4 tw-py-8">
+    <div class="tw-max-w-5xl tw-mx-auto tw-px-3 sm:tw-px-4 tw-py-6 sm:tw-py-8">
       <div v-if="pending" class="tw-flex tw-justify-center tw-items-center tw-py-16">
         <div class="tw-animate-spin tw-rounded-full tw-h-16 tw-w-16 tw-border-b-2 tw-border-blue-600"></div>
       </div>
@@ -16,7 +16,7 @@
       </div>
 
       <div v-else class="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden tw-animate-slide-up">
-        <div class="tw-p-6 lg:tw-p-8">
+        <div class="tw-p-4 sm:tw-p-6 lg:tw-p-8">
           <!-- Breadcrumbs -->
           <nav class="tw-flex tw-mb-6" aria-label="Breadcrumb">
             <ol class="tw-inline-flex tw-items-center tw-space-x-1 md:tw-space-x-3">
@@ -41,7 +41,7 @@
 
           <article>
             <header class="tw-mb-8">
-              <h1 class="tw-text-3xl lg:tw-text-4xl tw-font-bold tw-text-gray-800 tw-mb-6 tw-leading-tight">
+              <h1 class="tw-text-2xl sm:tw-text-3xl lg:tw-text-4xl tw-font-bold tw-text-gray-800 tw-mb-6 tw-leading-tight">
                 {{ post.titulo }}
               </h1>
 
