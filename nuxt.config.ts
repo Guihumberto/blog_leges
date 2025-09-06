@@ -6,9 +6,10 @@ export default defineNuxtConfig({
   css: [
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',
+    'vue3-mindmap/dist/style.css',
   ],
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify', 'vue3-mindmap'],
   },
   vite: {
     define: {
@@ -91,8 +92,6 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxtjs/tailwindcss'
   ],
-
-
 
 
   googleFonts: {

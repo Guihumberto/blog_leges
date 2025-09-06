@@ -1,5 +1,5 @@
 <template>
-  <article class="tw-blog-card tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden tw-animate-slide-up" @click.stop="$router.push(`/post/${post._id}`)">
+  <article class="tw-blog-card tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden tw-animate-slide-up mb-5" @click.stop="$router.push(`/post/${generateSlug(post._source.titulo)}-${post._id}`)">
     <div class="tw-p-8">
       <div class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-center lg:tw-justify-between tw-mb-6">
         <div class="tw-mb-4 lg:tw-mb-0">
@@ -47,7 +47,7 @@
           <span class="tw-text-gray-500 tw-text-sm" v-if="post._source.palavras_chaves?.length > 4">+{{ post._source.palavras_chaves?.length - 4 }} mais</span>
         </div>
 
-        <button class="tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg tw-font-semibold tw-transition-all tw-flex tw-items-center" @click.stop="$router.push(`/post/${post._id}`)">
+        <button class="tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg tw-font-semibold tw-transition-all tw-flex tw-items-center" @click.stop="$router.push(`/post/${generateSlug(post._source.titulo)}-${post._id}`)">
           VER MAIS
           <svg class="tw-w-4 tw-h-4 tw-ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -83,5 +83,17 @@
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR')
+  }
+
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+      .trim()
+      .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
   }
   </script>

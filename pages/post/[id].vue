@@ -1,6 +1,6 @@
 <template>
   <div class="tw-min-h-screen tw-bg-gray-50">
-    <div class="tw-max-w-4xl tw-mx-auto tw-px-4 tw-py-8">
+    <div class="tw-max-w-5xl tw-mx-auto tw-px-4 tw-py-8">
       <div v-if="pending" class="tw-flex tw-justify-center tw-items-center tw-py-16">
         <div class="tw-animate-spin tw-rounded-full tw-h-16 tw-w-16 tw-border-b-2 tw-border-blue-600"></div>
       </div>
@@ -96,6 +96,42 @@
             <!-- Conteúdo do post -->
             <div class="tw-prose tw-prose-lg tw-max-w-none tw-text-gray-700 tw-leading-relaxed tw-mb-8" v-html="processedContent"></div>
 
+            <!-- Mind Map Section -->
+            <div v-if="mindMap" class="tw-mb-8">
+              <!-- <div class="tw-bg-blue-50 tw-rounded-2xl tw-p-6 tw-border tw-border-blue-200">
+                <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+                  <div class="tw-flex tw-items-center">
+                    <svg class="tw-w-5 tw-h-5 tw-text-blue-600 tw-mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    <span class="tw-text-lg tw-font-semibold tw-text-gray-800">Mapa Mental Disponível</span>
+                  </div>
+                  <button
+                    @click="openMindMapDialog"
+                    class="tw-flex tw-items-center tw-px-4 tw-py-2 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-rounded-lg tw-font-medium tw-transition-colors"
+                  >
+                    <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    Visualizar Mapa Mental
+                  </button>
+                </div>
+                <p class="tw-text-gray-600 tw-text-sm">
+                  Clique no botão acima para visualizar e interagir com o mapa mental deste artigo.
+                </p>
+              </div> -->
+
+              <!-- Mind Map Dialog -->
+              <newCompMindMap
+                v-model="showMindMapDialog"
+                :title="`Mapa Mental - ${post?.titulo || 'Post'}`"
+                :mapleges="formatMindMapData(mindMap)"
+                :original-map-data="mindMap"
+                :mind-map-id="mindMap.id"
+              />
+            </div>
+
             <!-- Questões Section -->
             <div v-if="post?.questoes?.length" class="tw-bg-gray-50 tw-rounded-2xl tw-p-6 tw-border tw-border-gray-200">
               <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
@@ -109,15 +145,14 @@
                 </div>
 
                 <div class="tw-flex tw-items-center tw-gap-2">
-                  <button
+                  <v-btn
                     @click="toggleQuestions(post)"
                     class="tw-flex tw-items-center tw-px-4 tw-py-2 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-rounded-lg tw-font-medium tw-transition-colors"
+                    density="compact"
+                    variant="text"
                   >
-                    <svg class="tw-w-4 tw-h-4 tw-mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
                     {{ showQuestions.has(post) ? 'Ocultar' : 'Ver' }} Questões
-                  </button>
+                  </v-btn>
 
                   <button
                     @click="shareCard(post)"
@@ -223,204 +258,291 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { parseMixedMarkdown } from '@/utils/parseMixedMarkdown'
+  import { computed } from 'vue'
+  import { parseMixedMarkdown } from '@/utils/parseMixedMarkdown'
+  import newCompMindMap from '@/components/newCompMindMap.vue'
 
-interface Post {
-  _id: string
-  titulo: string
-  texto: string
-  disciplina: string
-  banca?: string
-  concurso?: string
-  cargo?: string
-  palavras_chaves: string[]
-  timestamp: string
-  questoes?: Questao[]
-}
+  interface Post {
+    _id: string
+    titulo: string
+    texto: string
+    disciplina: string
+    banca?: string
+    concurso?: string
+    cargo?: string
+    palavras_chaves: string[]
+    timestamp: string
+    questoes?: Questao[]
+    id_law?: string
+    art?: string
+    [key: string]: any
+  }
 
-interface Questao {
-  enunciado: string
-  alternativas: Record<string, string>
-  resposta_correta: string
-  justificativa: string
-}
+  interface Questao {
+    enunciado: string
+    alternativas: Record<string, string>
+    resposta_correta: string
+    justificativa: string
+  }
 
-const route = useRoute()
-const { searchPosts } = useElasticsearch()
+  const route = useRoute()
+  const { searchPosts } = useElasticsearch()
 
-const post = ref<Post | null>(null)
-const pending = ref(true)
-const error = ref<Error | null>(null)
+  const post = ref<Post | null>(null)
+  const mindMap = ref<any>(null)
+  const showMindMapDialog = ref(false)
+  const pending = ref(true)
+  const error = ref<Error | null>(null)
 
-// Estados reativos
-const expanded = reactive(new Set())
-const showQuestions = reactive(new Set())
-const showAllKeywords = reactive(new Set())
-const favorites = reactive(new Set())
-const userAnswers = reactive(new Map())
-const showAnswers = reactive(new Set())
+  // Extract ID from slug-id format (slug-id)
+  const extractIdFromSlug = (slugId: string) => {
+    const parts = slugId.split('-')
+    // Find the last part that looks like an ID (assuming IDs are longer and contain numbers/letters)
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (parts[i].length > 10 && /^[a-zA-Z0-9]+$/.test(parts[i])) {
+        return parts.slice(i).join('-')
+      }
+    }
+    // Fallback: assume the last part is the ID
+    return parts[parts.length - 1]
+  }
 
-const breadcrumbs = computed(() => [
-  { title: 'Início', to: '/' },
-  { title: 'Post', disabled: true }
-])
+  const postId = computed(() => extractIdFromSlug(route.params.id as string))
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('pt-BR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+      .trim()
+      .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
+  }
+
+  // Estados reativos
+  const expanded = reactive(new Set())
+  const showQuestions = reactive(new Set())
+  const showAllKeywords = reactive(new Set())
+  const favorites = reactive(new Set())
+  const userAnswers = reactive(new Map())
+  const showAnswers = reactive(new Set())
+
+  const breadcrumbs = computed(() => [
+    { title: 'Início', to: '/' },
+    { title: 'Post', disabled: true }
+  ])
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  // SEO dinâmico
+  watchEffect(() => {
+    if (post.value) {
+      useHead({
+        title: `${post.value.titulo} - Legislação Educacional`,
+        link: [
+          { rel: 'canonical', href: `https://blogleges.estudodalei.com.br/post/${generateSlug(post.value.titulo)}-${post.value._id}` }
+        ],
+        meta: [
+          {
+            name: 'description',
+            content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') + '...'
+          },
+          {
+            name: 'keywords',
+            content: post.value.palavras_chaves.join(', ')
+          },
+          { name: 'author', content: 'Legislação Educacional' },
+          { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
+          { property: 'og:title', content: post.value.titulo },
+          { property: 'og:description', content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') },
+          { property: 'og:type', content: 'article' },
+          { property: 'og:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' },
+          { property: 'og:url', content: `https://blogleges.estudodalei.com.br/post/${generateSlug(post.value.titulo)}-${post.value._id}` },
+          { property: 'og:site_name', content: 'Blog Leges' },
+          { property: 'og:locale', content: 'pt_BR' },
+          { property: 'article:author', content: 'Legislação Educacional' },
+          { property: 'article:section', content: post.value.disciplina },
+          { property: 'article:tag', content: post.value.palavras_chaves.join(', ') },
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:title', content: post.value.titulo },
+          { name: 'twitter:description', content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') },
+          { name: 'twitter:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' }
+        ]
+      })
+    }
   })
-}
 
-// SEO dinâmico
-watchEffect(() => {
-  if (post.value) {
-    useHead({
-      title: `${post.value.titulo} - Legislação Educacional`,
-      link: [
-        { rel: 'canonical', href: `https://blogleges.estudodalei.com.br/post/${post.value._id}` }
-      ],
-      meta: [
-        {
-          name: 'description',
-          content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') + '...'
-        },
-        {
-          name: 'keywords',
-          content: post.value.palavras_chaves.join(', ')
-        },
-        { name: 'author', content: 'Legislação Educacional' },
-        { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
-        { property: 'og:title', content: post.value.titulo },
-        { property: 'og:description', content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') },
-        { property: 'og:type', content: 'article' },
-        { property: 'og:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' },
-        { property: 'og:url', content: `https://blogleges.estudodalei.com.br/post/${post.value._id}` },
-        { property: 'og:site_name', content: 'Blog Leges' },
-        { property: 'og:locale', content: 'pt_BR' },
-        { property: 'article:author', content: 'Legislação Educacional' },
-        { property: 'article:section', content: post.value.disciplina },
-        { property: 'article:tag', content: post.value.palavras_chaves.join(', ') },
-        { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: post.value.titulo },
-        { name: 'twitter:description', content: post.value.texto.substring(0, 160).replace(/<[^>]*>/g, '') },
-        { name: 'twitter:image', content: 'https://blogleges.estudodalei.com.br/og-image.jpg' }
-      ]
-    })
-  }
-})
-
-const toggleQuestions = (index: Post) => {
-  if (showQuestions.has(index)) {
-    showQuestions.delete(index)
-  } else {
-    showQuestions.add(index)
-  }
-}
-
-const shareCard = (item: Post) => {
-  if (navigator.share) {
-    navigator.share({
-      title: item.titulo,
-      text: item.texto.substring(0, 100) + '...',
-      url: window.location.href
-    })
-  } else {
-    // Fallback para navegadores que não suportam Web Share API
-    navigator.clipboard.writeText(item.titulo + '\n\n' + item.texto)
-  }
-}
-
-const selectAlternative = (cardIndex: Post, questionIndex: number, alternative: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  if (!showAnswers.has(questionId)) {
-    userAnswers.set(questionId, alternative)
-  }
-}
-
-const getAlternativeClass = (cardIndex: Post, questionIndex: number, alternative: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  const userAnswer = userAnswers.get(questionId)
-  const isAnswerRevealed = showAnswers.has(questionId)
-
-  if (!isAnswerRevealed) {
-    return {
-      'tw-cursor-pointer hover:tw-bg-blue-50': true,
-      'tw-bg-blue-100 tw-border-blue-300': userAnswer === alternative
+  const toggleQuestions = (index: Post) => {
+    if (showQuestions.has(index)) {
+      showQuestions.delete(index)
+    } else {
+      showQuestions.add(index)
     }
   }
 
-  if (!post.value?.questoes) return {}
-
-  const correctAnswer = post.value.questoes[questionIndex].resposta_correta
-
-  return {
-    'tw-bg-green-100 tw-border-green-300': alternative === correctAnswer,
-    'tw-bg-red-100 tw-border-red-300': userAnswer === alternative && alternative !== correctAnswer,
-    'tw-cursor-not-allowed tw-opacity-60': true
+  const shareCard = (item: Post) => {
+    if (navigator.share) {
+      navigator.share({
+        title: item.titulo,
+        text: item.texto.substring(0, 100) + '...',
+        url: window.location.href
+      })
+    } else {
+      // Fallback para navegadores que não suportam Web Share API
+      navigator.clipboard.writeText(item.titulo + '\n\n' + item.texto)
+    }
   }
-}
 
-const revealAnswer = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  showAnswers.add(questionId)
-}
-
-const resetQuestion = (cardIndex: Post, questionIndex: number) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  userAnswers.delete(questionId)
-  showAnswers.delete(questionId)
-}
-
-const getResultClass = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  const userAnswer = userAnswers.get(questionId)
-  return userAnswer === correctAnswer
-    ? 'tw-bg-green-100 tw-text-green-800'
-    : 'tw-bg-red-100 tw-text-red-800'
-}
-
-const getResultIconPath = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  const userAnswer = userAnswers.get(questionId)
-  return userAnswer === correctAnswer
-    ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-    : 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
-}
-
-const getResultText = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
-  const questionId = `${cardIndex}-${questionIndex}`
-  const userAnswer = userAnswers.get(questionId)
-  return userAnswer === correctAnswer ? 'Parabéns! Resposta correta!' : 'Resposta incorreta'
-}
-
-const processedContent = computed(() => {
-  if (!post.value) return ''
-
-  try {
-    const originalHtmlWithMarkdown = post.value.texto
-    const htmlContent = parseMixedMarkdown(originalHtmlWithMarkdown)
-    return htmlContent
-  } catch (error) {
-    console.error('Erro ao processar markdown:', error)
-    return post.value.texto
+  const selectAlternative = (cardIndex: Post, questionIndex: number, alternative: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    if (!showAnswers.has(questionId)) {
+      userAnswers.set(questionId, alternative)
+    }
   }
-})
 
-onMounted(async () => {
-  try {
-    const result = await $fetch(`/api/elasticsearch/post/${route.params.id}`)
-    post.value = result.data
-    error.value = null
-  } catch (err) {
-    error.value = err instanceof Error ? err : new Error('Erro desconhecido')
-    console.error('Erro ao carregar post:', err)
-  } finally {
-    pending.value = false
+  const getAlternativeClass = (cardIndex: Post, questionIndex: number, alternative: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    const userAnswer = userAnswers.get(questionId)
+    const isAnswerRevealed = showAnswers.has(questionId)
+
+    if (!isAnswerRevealed) {
+      return {
+        'tw-cursor-pointer hover:tw-bg-blue-50': true,
+        'tw-bg-blue-100 tw-border-blue-300': userAnswer === alternative
+      }
+    }
+
+    if (!post.value?.questoes) return {}
+
+    const correctAnswer = post.value.questoes[questionIndex].resposta_correta
+
+    return {
+      'tw-bg-green-100 tw-border-green-300': alternative === correctAnswer,
+      'tw-bg-red-100 tw-border-red-300': userAnswer === alternative && alternative !== correctAnswer,
+      'tw-cursor-not-allowed tw-opacity-60': true
+    }
   }
-})
+
+  const revealAnswer = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    showAnswers.add(questionId)
+  }
+
+  const resetQuestion = (cardIndex: Post, questionIndex: number) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    userAnswers.delete(questionId)
+    showAnswers.delete(questionId)
+  }
+
+  const getResultClass = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    const userAnswer = userAnswers.get(questionId)
+    return userAnswer === correctAnswer
+      ? 'tw-bg-green-100 tw-text-green-800'
+      : 'tw-bg-red-100 tw-text-red-800'
+  }
+
+  const getResultIconPath = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    const userAnswer = userAnswers.get(questionId)
+    return userAnswer === correctAnswer
+      ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+      : 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
+  }
+
+  const getResultText = (cardIndex: Post, questionIndex: number, correctAnswer: string) => {
+    const questionId = `${cardIndex}-${questionIndex}`
+    const userAnswer = userAnswers.get(questionId)
+    return userAnswer === correctAnswer ? 'Parabéns! Resposta correta!' : 'Resposta incorreta'
+  }
+
+  const processedContent = computed(() => {
+    if (!post.value) return ''
+
+    try {
+      const originalHtmlWithMarkdown = post.value.texto
+      const htmlContent = parseMixedMarkdown(originalHtmlWithMarkdown)
+      return htmlContent
+    } catch (error) {
+      console.error('Erro ao processar markdown:', error)
+      return post.value.texto
+    }
+  })
+
+  const openMindMapDialog = () => {
+    showMindMapDialog.value = true
+  }
+
+  const formatMindMapData = (mindMapData: any) => {
+    if (!mindMapData) return []
+
+    console.log('Raw mind map data:', mindMapData)
+
+    // If the data already has the correct structure, return it
+    if (Array.isArray(mindMapData) && mindMapData.length > 0 && mindMapData[0].name) {
+      return mindMapData
+    }
+
+    // If it has children property, use that
+    if (mindMapData.children && Array.isArray(mindMapData.children)) {
+      return mindMapData.children
+    }
+
+    // If it's a single node with title, convert to name
+    if (mindMapData.title) {
+      const converted = {
+        name: mindMapData.title,
+        children: mindMapData.children || [],
+        _id: mindMapData.id,
+        art: mindMapData.art,
+        subtitle: mindMapData.subtitle,
+        type: mindMapData.type
+      }
+      console.log('Converted mind map data:', converted)
+      return [converted]
+    }
+
+    // If it's a single node with name, wrap it in an array
+    if (mindMapData.name) {
+      return [mindMapData]
+    }
+
+    // Fallback: try to create a basic structure
+    const fallback = [{
+      name: mindMapData.title || mindMapData.name || 'Mapa Mental',
+      children: mindMapData.children || [],
+      _id: mindMapData.id,
+      art: mindMapData.art
+    }]
+    console.log('Fallback mind map data:', fallback)
+    return fallback
+  }
+
+  onMounted(async () => {
+    try {
+      const result = await $fetch(`/api/elasticsearch/post/${postId.value}`)
+      post.value = result.data as Post
+      mindMap.value = result.mindMap
+      console.log('Post data:', post.value)
+      console.log('Mind map data:', mindMap.value)
+      console.log('Has id_law:', post.value?.id_law)
+      console.log('Has art:', post.value?.art)
+      error.value = null
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error('Erro desconhecido')
+      console.error('Erro ao carregar post:', err)
+    } finally {
+      pending.value = false
+    }
+  })
 </script>
 
 <style scoped>

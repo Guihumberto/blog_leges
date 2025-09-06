@@ -116,7 +116,7 @@
 
   // Estado reativo
   const posts = ref([])
-  const aggregations = ref({})
+  const aggregations = ref<any>({})
   const totalPosts = ref(0)
   const currentPage = ref(1)
   const pending = ref(true)
@@ -155,7 +155,7 @@
         posts.value.push(...result.hits)
       }
       
-      totalPosts.value = result.total.value
+      totalPosts.value = typeof result.total === 'number' ? result.total : (result.total?.value || 0)
       error.value = null
     } catch (err) {
       error.value = err
