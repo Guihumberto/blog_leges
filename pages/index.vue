@@ -21,12 +21,12 @@
                 </div>
 
                 <h1 class="tw-text-5xl tw-md:text-6xl tw-font-bold tw-mb-6 tw-leading-tight">
-                    Blog <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500">Estudo da Lei</span>
+                    <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500">Estudo da Lei</span> - Blog Leges
                 </h1>
 
                 <p class="tw-text-xl tw-md:text-2xl tw-mb-8 tw-text-gray-100 tw-leading-relaxed tw-max-w-3xl tw-mx-auto">
-                    Textos explicativos e questões sobre legislação para concursos<br>
-                    <span class="tw-text-lg tw-opacity-90">Organizado por disciplina, banca, concurso e cargo</span>
+                    Blog especializado em <strong>estudo da lei</strong> com textos explicativos sobre legislação educacional<br>
+                    <span class="tw-text-lg tw-opacity-90">Comentários detalhados, questões de concurso organizadas por disciplina, banca e cargo</span>
                 </p>
 
             </div>
@@ -92,20 +92,53 @@
 </template>
 
 <script setup lang="ts">
-  // SEO
+  // SEO otimizado
   useHead({
-    title: 'Blog Leges -  Estudo da Lei: Comentários e questões de concurso',
+    title: 'Estudo da Lei - Blog Leges: Legislação Educacional, Comentários e Questões de Concurso',
     link: [
       { rel: 'canonical', href: 'https://blogleges.estudodalei.com.br/' }
     ],
     meta: [
       {
         name: 'description',
-        content: 'Explore textos explicativos sobre legislação educacional organizados por disciplina, banca, concurso e cargo. Encontre informações atualizadas para concursos públicos.'
+        content: 'Estudo da Lei - Blog especializado em legislação educacional com textos explicativos, comentários detalhados e questões de concurso. Conteúdo organizado por disciplina, banca e cargo para concursos públicos. Encontre aqui o melhor material para seu estudo da lei.'
       },
       {
         name: 'keywords',
-        content: 'legislação educacional, concursos públicos, direito educacional, leis de educação, normativas educacionais'
+        content: 'estudo da lei, blog estudo da lei, legislação educacional, concursos públicos, direito educacional, leis de educação, normativas educacionais, questões de concurso, comentários jurídicos, preparação concurso, blog leges, leis comentadas, artigos lei, preparação concurso público, estudo legislação'
+      },
+      { property: 'og:title', content: 'Estudo da Lei - Blog Leges: Legislação Educacional e Concursos' },
+      { property: 'og:description', content: 'Blog especializado em estudo da lei com conteúdo sobre legislação educacional, comentários detalhados e questões de concurso para preparação em concursos públicos.' },
+      { property: 'article:section', content: 'Legislação Educacional' },
+      { property: 'article:tag', content: 'estudo da lei, blog estudo da lei, legislação educacional, concursos' }
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "Blog Leges - Estudo da Lei", 
+          "description": "Blog especializado em estudo da lei com legislação educacional, comentários e questões de concurso",
+          "url": "https://blogleges.estudodalei.com.br",
+          "mainEntityOfPage": "https://blogleges.estudodalei.com.br",
+          "keywords": "estudo da lei, blog estudo da lei, legislação educacional, concursos públicos",
+          "inLanguage": "pt-BR",
+          "author": {
+            "@type": "Organization",
+            "name": "Blog Leges",
+            "url": "https://blogleges.estudodalei.com.br"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Blog Leges - Estudo da Lei",
+            "url": "https://blogleges.estudodalei.com.br",
+            "logo": {
+              "@type": "ImageObject", 
+              "url": "https://blogleges.estudodalei.com.br/leges.png"
+            }
+          }
+        })
       }
     ]
   })
@@ -115,12 +148,12 @@
   const { searchPosts, getAggregations } = useElasticsearch()
 
   // Estado reativo
-  const posts = ref([])
+  const posts = ref<any[]>([])
   const aggregations = ref<any>({})
   const totalPosts = ref(0)
   const currentPage = ref(1)
   const pending = ref(true)
-  const error = ref(null)
+  const error = ref<any>(null)
   const loadingMore = ref(false)
 
   const filters = ref({

@@ -1,18 +1,58 @@
+# Robots.txt para Blog Leges - Estudo da Lei
+# https://blogleges.estudodalei.com.br
+
 User-Agent: *
 Allow: /
 
-# Allow access to sitemap
+# Allow access to important content
+Allow: /post/
 Allow: /sitemap.xml
+Allow: /favicon.ico
+Allow: /og-image.jpg
+Allow: /leges.png
 
-# Disallow access to admin areas (if any)
+# Disallow access to admin and API areas
 Disallow: /admin/
 Disallow: /api/
+Disallow: /_nuxt/
+Disallow: /.nuxt/
 
-# Disallow access to search results
+# Disallow access to search results and filters to prevent duplicate content
 Disallow: /*?*search=*
+Disallow: /*?*disciplina=*
+Disallow: /*?*banca=*
+Disallow: /*?*concurso=*
+Disallow: /*?*cargo=*
 
-# Crawl delay (optional)
+# Allow specific bots with optimized settings
+User-Agent: Googlebot
+Allow: /
 Crawl-delay: 1
+
+User-Agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+User-Agent: Slurp
+Allow: /
+Crawl-delay: 3
+
+# Block problematic bots
+User-Agent: AhrefsBot
+Disallow: /
+
+User-Agent: MJ12bot
+Disallow: /
+
+User-Agent: SemrushBot
+Disallow: /
+
+User-Agent: DotBot
+Disallow: /
 
 # Sitemap location
 Sitemap: https://blogleges.estudodalei.com.br/sitemap.xml
+
+# Additional information for search engines
+# This site contains educational content about Brazilian educational legislation
+# Main topics: estudo da lei, blog estudo da lei, legislação educacional, concursos públicos
