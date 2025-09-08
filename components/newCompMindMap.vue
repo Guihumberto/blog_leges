@@ -2,9 +2,9 @@
     <v-card class="mindmap-card">
       <v-card-title class="d-flex justify-space-between align-center pa-4 mindmap-header">
         <div class="d-flex ga-2 align-center">
-          <v-icon size="28" color="primary">mdi-sitemap</v-icon>
+          <v-icon size="28" color="primary" v-if="!mobile">mdi-sitemap</v-icon>
           <div>
-            <p>{{ title }}</p>
+            <p :style="mobile ? 'font-size: .8rem;' : 'font-size: 1.2rem'" class="text-wrap">{{ title }}</p>
           </div>
         </div>
       </v-card-title>
@@ -96,7 +96,9 @@
       
       <v-card-text class="pa-0">
         <div class="mindmap-container" :style="{ height: containerHeight }">
-          <mindmap
+          <component
+            v-if="mindmap && isClientReady"
+            :is="mindmap"
             ref="mindmapRef"
             v-model="internalMapleges"
             locale="ptBR"
@@ -120,8 +122,15 @@
             @node-click="handleNodeClick"
           />
           
+          <div v-else class="tw-flex tw-justify-center tw-items-center tw-h-full">
+            <div class="tw-text-center">
+              <div class="tw-animate-spin tw-rounded-full tw-h-12 tw-w-12 tw-border-b-2 tw-border-blue-600 tw-mx-auto tw-mb-4"></div>
+              <p class="tw-text-gray-600">Carregando mapa mental...</p>
+            </div>
+          </div>
+          
           <!-- Controles customizados sobrepostos -->
-          <div class="mindmap-controls">
+          <div class="mindmap-controls" v-if="!mobile">
             <v-card class="controls-card" elevation="4">
               <v-card-text class="pa-2">
                 <div class="d-flex flex-column ga-1">
@@ -202,18 +211,6 @@
               <v-card-text class="pa-3 pt-0">
                 <div class="help-shortcuts">
                   <div class="shortcut-item">
-                    <kbd>Tab</kbd> <span>Adicionar nó filho</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <kbd>Enter</kbd> <span>Adicionar nó irmão</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <kbd>Delete</kbd> <span>Excluir nó</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <kbd>F2</kbd> <span>Editar nó</span>
-                  </div>
-                  <div class="shortcut-item">
                     <kbd>Ctrl + Z</kbd> <span>Desfazer</span>
                   </div>
                   <div class="shortcut-item">
@@ -223,10 +220,10 @@
                     <kbd>+/-</kbd> <span>Zoom</span>
                   </div>
                   <div class="shortcut-item">
-                    <kbd>C</kbd> <span>Centralizar</span>
+                    <kbd>Alt + C</kbd> <span>Centralizar</span>
                   </div>
                   <div class="shortcut-item">
-                    <kbd>F</kbd> <span>Ajustar tela</span>
+                    <kbd>Alt + F</kbd> <span>Ajustar tela</span>
                   </div>
                 </div>
               </v-card-text>
@@ -271,8 +268,13 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import mindmap from "vue3-mindmap"
-import "vue3-mindmap/dist/style.css"
+import { useDisplay } from 'vuetify/lib/composables/display.mjs'
+
+const { mobile } = useDisplay()
+
+// Componente dinâmico para evitar problemas de SSR
+const mindmap = ref(null)
+const isClientReady = ref(false)
 
 const props = defineProps({
   modelValue: {
@@ -649,15 +651,34 @@ const handleKeydown = (event) => {
 onMounted(async () => {
   document.addEventListener('keydown', handleKeydown)
   
-  // Aguardar o mindmap ser montado e configurar observadores
-  await nextTick()
-  
-  // Aguardar botões aparecerem
-  try {
-    await waitForMindmapButtons()
-    console.log('Botões do mindmap encontrados e prontos para uso')
-  } catch (error) {
-    console.warn('Alguns botões do mindmap podem não estar disponíveis:', error)
+  // Carregar o componente mindmap apenas no cliente
+  if (import.meta.client) {
+    try {
+      const mindmapModule = await import('vue3-mindmap')
+      mindmap.value = mindmapModule.default || mindmapModule
+      
+      // Importar o CSS
+      await import('vue3-mindmap/dist/style.css')
+      
+      // Marcar como pronto para renderizar
+      isClientReady.value = true
+      
+      // Aguardar o mindmap ser montado
+      await nextTick()
+      
+      // Aguardar botões aparecerem
+      setTimeout(async () => {
+        try {
+          await waitForMindmapButtons()
+          console.log('Botões do mindmap encontrados e prontos para uso')
+        } catch (error) {
+          console.warn('Alguns botões do mindmap podem não estar disponíveis:', error)
+        }
+      }, 500)
+    } catch (error) {
+      console.error('Erro ao carregar vue3-mindmap:', error)
+      isClientReady.value = false
+    }
   }
 })
 

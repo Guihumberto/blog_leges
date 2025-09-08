@@ -50,7 +50,7 @@ export default defineNuxtConfig({
       script: [
         // ResizeObserver polyfill for browser compatibility
         {
-          src: 'https://polyfill.io/v3/polyfill.min.js?features=ResizeObserver',
+          src: 'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.min.js',
           defer: true
         },
         {

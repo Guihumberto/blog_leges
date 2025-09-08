@@ -162,37 +162,34 @@
               </div> -->
 
               <!-- Mind Map Dialog -->
+            <ClientOnly>
               <newCompMindMap
+                v-if="mindMap"
                 v-model="showMindMapDialog"
                 :title="`Mapa Mental - ${post?.titulo || 'Post'}`"
                 :mapleges="formatMindMapData(mindMap)"
                 :original-map-data="mindMap"
                 :mind-map-id="mindMap.id"
               />
+            </ClientOnly>
             </div>
 
             <!-- Questões Section -->
             <div v-if="post?.questoes?.length" class="tw-bg-gray-50 tw-rounded-2xl tw-p-6 tw-border tw-border-gray-200">
               <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
                 <div class="tw-flex tw-items-center">
-                  <svg class="tw-w-5 tw-h-5 tw-text-blue-600 tw-mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <span class="tw-text-lg tw-font-semibold tw-text-gray-800">
-                    {{ post?.questoes?.length }} Quest{{ post?.questoes?.length > 1 ? 'ões' : 'ão' }}
-                  </span>
+                  <v-btn
+                    @click="toggleQuestions(post)"
+                    class="border rounded-lg"
+                    density="compact"
+                    variant="text"
+                    :append-icon="showQuestions.has(post) ? 'mdi-menu-down' : 'mdi-menu-up'"
+                  >
+                   {{ post?.questoes?.length }}  Quest{{ post?.questoes?.length > 1 ? 'ões' : 'ão' }}
+                  </v-btn>
                 </div>
 
                 <div class="tw-flex tw-items-center tw-gap-2">
-                  <v-btn
-                    @click="toggleQuestions(post)"
-                    class="tw-flex tw-items-center tw-px-4 tw-py-2 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-rounded-lg tw-font-medium tw-transition-colors"
-                    density="compact"
-                    variant="text"
-                  >
-                    {{ showQuestions.has(post) ? 'Ocultar' : 'Ver' }} Questões
-                  </v-btn>
-
                   <button
                     @click="shareCard(post)"
                     class="tw-p-2 tw-text-gray-500 hover:tw-text-gray-700 tw-transition-colors"
